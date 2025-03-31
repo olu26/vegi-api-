@@ -172,7 +172,45 @@ const resetpasswords = async (req, res) => {
 }
 
 // routers for managing users as an admin
-const getallusers =  async (req,res) =>{
+const enableUser = async (req, res) => {
+    const user = req.user;
+
+    if(user.role !== "admin"){
+        return res.status(400).json({message:"unauthorized login"})
+    }
+    try {
+        const userId = req.params.id;
+        const updatedUser = await accountmodel.findByIdAndUpdate(userId, { isActive: true }, { new: true });
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.status(200).json({ message: "User enabled successfully", data: updatedUser });
+    } catch (error) {
+        console.log(error.message);
+        return res.status(400).json({ message: "Error occurred while enabling user" });
+    }
+}
+
+const disableUser = async (req, res) => {
+    const user = req.user;
+
+    if(user.role !== "admin"){
+        return res.status(400).json({message:"unauthorized login"})
+    }
+    try {
+        const userId = req.params.id;
+        const updatedUser = await accountmodel.findByIdAndUpdate(userId, { isActive: false }, { new: true });
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.status(200).json({ message: "User disabled successfully", data: updatedUser });
+    } catch (error) {
+        console.log(error.message);
+        return res.status(400).json({ message: "Error occurred while disabling user" });
+    }
+}
+
+const getallusers = async (req, res) => {
     const user = req.user;
 
     if(user.role !== "admin"){
@@ -228,4 +266,16 @@ const getallusers =  async (req,res) =>{
 }
 
 
-module.exports ={registar,login, forgetpasswords,verifyotps,resetpasswords,getallusers, getaUser, updateUserRole}
+module.exports = {
+    registar,
+    login,
+    forgetpasswords,
+    verifyotps,
+    resetpasswords,
+    getallusers,
+    getaUser,
+    updateUserRole,
+    enableUser,
+    disableUser
+}
+
