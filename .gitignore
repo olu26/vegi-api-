@@ -1,0 +1,34 @@
+.env
+node_modules
+      // const data = await accountmodel.findOne({ email: email }).select("-password")
+
+
+
+       const adminlogin = async(req,res)=>{
+    try {
+        const { error } = validateregistar(req.body)
+        if (error) {
+            return res.status(400).json({ message: error.details[0].message });
+        }
+        const { firstname, lastname, email, password,address } = req.body
+        const checkEmail = await accountmodel.findOne({ email: email })
+        if (checkEmail) {
+            return res.status(201).json({ message: "Email Already In Use" })
+        }
+        const newregistar = new accountmodel({
+            firstname,
+            lastname,
+            email,
+            password,
+            address,
+        })
+        await newregistar.save()
+        await accountmodel.create({ firstname,lastname, email, password,address })
+     
+        res.status(201).json({ message: "Registar successfully" })
+    } catch (error) {
+        console.log(error.message)
+        return res.status(400).json({ message: "Error Occured !!" })
+    }
+
+ }
