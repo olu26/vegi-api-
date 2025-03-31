@@ -55,7 +55,7 @@ const addcart = async (req, res) => {
     try {
         const productid = req.params?.productid
         if (!productid) {
-            return res.status(400), json({ message: "Bad Request" })
+            return res.status(400).json({ message: "Bad Request" })
         };
         const product = await productmodel.findOne({ _id: productid })
         if (!product) {
