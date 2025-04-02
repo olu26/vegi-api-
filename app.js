@@ -23,11 +23,19 @@ mongoose.connect(mydata).then(() => {
 }).catch(err => { console.log(err) })
 
 // router middlewares
-app.use("/api", accountrouter)
+app.get("/", (req, res) => {
+    res.send("THIS IS MY API PROJECT");
+});
+
+app.use("/api", accountrouter);
 app.use("/api", allrouter)
 app.use("/api", userprofile)
 
 
+
+app.use((req, res) => {
+    res.status(404).send("Route not found");
+});
 
 app.listen(port, () => {
     console.log("running on port" + port)
