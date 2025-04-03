@@ -1,9 +1,9 @@
 const express = require("express");
 const { getproduct, postproduct, addcart, getcart, getAproduct } = require("../controllers/generalcontroller");
 const { protected } = require("../middlewares/authorization");
-const { updateOrderStatus, createOrder } = require("../controllers/ordercontroller"); // Import createOrder
+const { updateOrderStatus, createOrder } = require("../controllers/ordercontroller");
 const { enableUser, disableUser } = require("../controllers/authcontroller");
-const { checkoutOrder } = require("../controllers/checkoutcontroller"); // Correct import
+const { checkoutOrder } = require("../controllers/checkoutcontroller"); 
 
 const { upload } = require("../middlewares/pictureaupload")
 const router = express.Router()
@@ -17,7 +17,7 @@ router.route('/users/enable/:id').post(protected, enableUser);
 router.route('/users/disable/:id').post(protected, disableUser);
 
 router.route('/orders/:id/status').put(protected, updateOrderStatus);
-router.route('/orders').post(protected, createOrder); // New route for creating orders
-router.route('/checkout/:id').post(protected, checkoutOrder); // Ensure this is the only definition
+router.route('/orders').post(protected, createOrder); 
+router.route('/checkout/:id').post(protected, checkoutOrder); 
 
 module.exports = router;

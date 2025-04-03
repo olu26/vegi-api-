@@ -5,9 +5,9 @@ const cookieparser = require("cookie-parser")
 const cors = require("cors");
 const path = require("path");
 require("dotenv").config();
- const accountrouter = require("./routers/authrouter")
- const allrouter = require('./routers/generalrouter')
- const userprofile = require("./routers/profilerouter")
+const accountrouter = require("./routers/authrouter")
+const allrouter = require('./routers/generalrouter')
+const userprofile = require("./routers/profilerouter")
 const app = express();
 
 const port = process.env.PORT;
@@ -22,19 +22,17 @@ mongoose.connect(mydata).then(() => {
     console.log("connected to the database")
 }).catch(err => { console.log(err) })
 
-// router middlewares
+// router middleware
 app.get("/", (req, res) => {
-    res.send("THIS IS MY API PROJECT");
+    res.status(200).json({ message: "THIS IS MY API PROJECT" });
 });
 
 app.use("/api", accountrouter);
 app.use("/api", allrouter)
 app.use("/api", userprofile)
 
-
-
 app.use((req, res) => {
-    res.status(404).send("Route not found");
+    res.status(404).json({ message: "Route not found" });
 });
 
 app.listen(port, () => {

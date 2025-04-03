@@ -26,10 +26,10 @@ const registar = async (req, res) => {
         await newregistar.save()
         await accountmodel.create({ firstname,lastname, email, password,address })
      
-        res.status(201).json({ message: "Registar successfully" })
+        res.status(201).json({ message: "Registration  successfully" })
     } catch (error) {
         console.log(error.message)
-        return res.status(400).json({ message: "Error Occured !!" })
+        return res.status(500).json({ message: "An Error Occurred !!" })
     }
 };
  
@@ -42,23 +42,23 @@ const login = async (req, res) => {
         const { email, password } = req.body
         const checkEmail = await accountmodel.findOne({ email: email })
         if (!checkEmail) {
-            return res.status(400).json({ message: "Email/Password Mismatch" })
+            return res.status(400).json({ message: "invalid email or password" })
         }
          const isMatchPassword = await bcrypt.compare(password, checkEmail.password);
          if (!isMatchPassword) {
-             return res.status(400).json({ message: "Email/Password Mismatch" })
+             return res.status(400).json({ message: "invalid email or password" })
         }
-        // generate jwt
+    
         const token = jwt.sign({ userid: checkEmail._id },process.env.SECRETPIN, {expiresIn: "6h" });
-        // set cookies
+    
 
-        res.cookie("newapi", token, { httpOnly:true, expiresIn: 21600000 })
+        res.cookie("newapi", token, { httpOnly:true, expiresIn: 21490000 })
         const data = await accountmodel.findOne({email:email})
   
        res.status(201).json({ message: "user login successfully", token, data })
     } catch (error) {
         console.log(error.message)
-        return res.status(400).json({ message: "Error Occured !!" })
+        return res.status(500).json({ message: "Error Occurred !!" })
     }
 }
 
@@ -95,7 +95,7 @@ const forgetpasswords = async (req, res) => {
         console.log(account)
     } catch (error) {
         console.log(error.message)
-        return res.status(400).json({ message: "Error Occured !!" })
+        return res.status(500).json({ message: "Error Occurred !!" })
     }
 }
 
@@ -123,7 +123,7 @@ const verifyotps = async (req, res) => {
         res.status(200).json({ message: "Otp verified Successful" })
     } catch (error) {
         console.log(error.message)
-        return res.status(400).json({ message: "Error Occured !!" })
+        return res.status(500).json({ message: "Error Occurred !!" })
     }
 
 }
@@ -167,7 +167,7 @@ const resetpasswords = async (req, res) => {
 
     } catch (error) {
         console.log(error.message)
-        return res.status(400).json({ message: "ErrorOccured !!" })
+        return res.status(500).json({ message: "Error Occurred !!" })
     }
 }
 
@@ -187,7 +187,7 @@ const enableUser = async (req, res) => {
         res.status(200).json({ message: "User enabled successfully", data: updatedUser });
     } catch (error) {
         console.log(error.message);
-        return res.status(400).json({ message: "Error occurred while enabling user" });
+        return res.status(500).json({ message: "Error occurred while enabling user" });
     }
 }
 
@@ -206,7 +206,7 @@ const disableUser = async (req, res) => {
         res.status(200).json({ message: "User disabled successfully", data: updatedUser });
     } catch (error) {
         console.log(error.message);
-        return res.status(400).json({ message: "Error occurred while disabling user" });
+        return res.status(500).json({ message: "Error occurred while disabling user" });
     }
 }
 
@@ -226,6 +226,7 @@ const getallusers = async (req, res) => {
     } catch (error) {
         res.send("an Error Occured while performing this operations")
         console.log(error.message)
+        return res.status(500).json({ message: "Error Occurred !!" })
     }
  }
   const getaUser = async(req,res) =>{
@@ -243,7 +244,7 @@ const getallusers = async (req, res) => {
          res.status(200).json({data:aUser})
     } catch ( error) {
          console.log(error.message)
-         res.status(400).json({message:"Error Occured !!"})
+         return res.status(500).json({message:"Error Occured !!"})
     }
   }
 
@@ -261,7 +262,7 @@ const getallusers = async (req, res) => {
         }
         res.json({user , message:"successfuly updated user role"});
     } catch (error) {
-        res.status(400).send('Error updating user');
+        return res.status(500).send('Error updating user');
     }
 }
 
@@ -278,4 +279,3 @@ module.exports = {
     enableUser,
     disableUser
 }
-
