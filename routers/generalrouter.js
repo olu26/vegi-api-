@@ -8,7 +8,7 @@ const { checkoutOrder } = require("../controllers/checkoutcontroller");
 const { upload } = require("../middlewares/pictureaupload")
 const router = express.Router()
 
-router.route("/").post(upload, postproduct).get(getproduct)
+router.route("/products").post(upload, postproduct).get(getproduct)
 router.route("/product/:id").get(getAproduct)
 router.route('/cart/:productid').post(protected, addcart)
 router.route('/cart').get(protected, getcart);
