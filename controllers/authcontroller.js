@@ -55,7 +55,9 @@ const login = async (req, res) => {
         res.cookie("newapi", token, { httpOnly:true, expiresIn: 21490000 })
         const data = await accountmodel.findOne({email:email})
   
-       res.status(201).json({ message: "user login successfully", token, data })
+        const userData = data.toObject(); // Convert to plain object
+        delete userData.password; // Exclude password
+        res.status(201).json({ message: "user login successfully", token, user: userData })
     } catch (error) {
         console.log(error.message)
         return res.status(500).json({ message: "Error Occurred !!" })
