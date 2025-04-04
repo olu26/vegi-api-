@@ -1,0 +1,48 @@
+Add to Cart
+Method: POST
+URL: /api/cart/:productid
+Access: Protected (requires auth cookie)
+Path Parameter:
+  :productid: The ID of product to add to cart
+
+Response:
+{
+  Message: "Product have been saved to cart"
+}
+
+Get All Cart Items
+Method: GET
+URL: /api/cart
+Access: Protected (requires auth cookie)
+Response:
+{
+  Message: "successful",
+  allcart: [<array_of_cart_items_with_product_details>]
+}
+
+Delete Cart Item
+Method: DELETE
+URL: /api/cart/:cartItemId
+Access: Protected (requires auth cookie)
+Path Parameter:
+  :cartItemId: The ID of cart item to remove
+
+Response (Success):
+{
+  Message: "Cart item removed successfully"
+}
+
+Response (Failure - Not Found):
+{
+  Message: "Cart item not found"
+}
+
+Checkout
+Method: POST
+URL: /api/checkout
+Access: Protected (requires auth cookie)
+Response:
+{
+  Message: "Checkout successful - Your order has been created",
+  order: <order_details_object>
+}
